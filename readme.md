@@ -16,6 +16,7 @@ git clone <https://github.com/w0mb/moneyTransfer.git> .
 Скачайте PostgreSQL с https://www.postgresql.org/download/
 
 Создайте файл .env в корне проекта и добавьте:
+
 DB_NAME=название предварительно созданной базы данных
 
 DB_USER=пользователя базы данных
