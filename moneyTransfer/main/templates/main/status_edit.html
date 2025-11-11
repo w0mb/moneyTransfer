@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- КАРТОЧКА РЕДАКТИРОВАНИЯ -->
+            <div class="card shadow-sm border-{% if form_type == 'status' %}primary{% elif form_type == 'type' %}success{% else %}warning{% endif %}">
+                <div class="card-header bg-{% if form_type == 'status' %}primary{% elif form_type == 'type' %}success{% else %}warning{% endif %} {% if form_type == 'type' %}text-dark{% else %}text-white{% endif %} text-center">
+                    <h5>✏️ {{ page_title }}</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if form_type == 'status' or form_type == 'type' %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Название {{ object_type }}а</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-flex gap-2 justify-content-between">
+                            <button type="submit" class="btn btn-{% if form_type == 'status' %}primary{% elif form_type == 'type' %}success{% else %}warning{% endif %} flex-fill">
+                                💾 Сохранить изменения
+                            </button>
+                            <a href="{% url 'reference' %}" class="btn btn-outline-secondary">
+                                ↩️ Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ О ТЕКУЩЕМ ОБЪЕКТЕ -->
+            <div class="card mt-3 border-light">
+                <div class="card-body text-center">
+                    <small class="text-muted">
+                        ID: {{ object.id }} | 
+                        Создан: {{ object.created_at|default:"Не указано" }} | 
+                        Обновлен: {{ object.updated_at|default:"Не указано" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% with request.GET.urlencode as query_string %}
+<div class="pagination">
+    <div class="pagination-info">
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+    </div>
+    
+    <div class="pagination-controls">
+        {% if page_obj.has_previous %}
+            <a href="?{% if query_string %}{{ query_string }}&{% endif %}{{ prefix }}page=1" class="pagination-link">
+                <i class="fas fa-angle-double-left"></i> Первая
+            </a>
+            <a href="?{% if query_string %}{{ query_string }}&{% endif %}{{ prefix }}page={{ page_obj.previous_page_number }}" class="pagination-link">
+                <i class="fas fa-angle-left"></i> Назад
+            </a>
+        {% else %}
+            <span class="pagination-disabled">
+                <i class="fas fa-angle-double-left"></i> Первая
+            </span>
+            <span class="pagination-disabled">
+                <i class="fas fa-angle-left"></i> Назад
+            </span>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="pagination-active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?{% if query_string %}{{ query_string }}&{% endif %}{{ prefix }}page={{ num }}" class="pagination-link">
+                    {{ num }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?{% if query_string %}{{ query_string }}&{% endif %}{{ prefix }}page={{ page_obj.next_page_number }}" class="pagination-link">
+                Вперед <i class="fas fa-angle-right"></i>
+            </a>
+            <a href="?{% if query_string %}{{ query_string }}&{% endif %}{{ prefix }}page={{ page_obj.paginator.num_pages }}" class="pagination-link">
+                Последняя <i class="fas fa-angle-double-right"></i>
+            </a>
+        {% else %}
+            <span class="pagination-disabled">
+                Вперед <i class="fas fa-angle-right"></i>
+            </span>
+            <span class="pagination-disabled">
+                Последняя <i class="fas fa-angle-double-right"></i>
+            </span>
+        {% endif %}
+    </div>
+</div>
+{% endwith %}

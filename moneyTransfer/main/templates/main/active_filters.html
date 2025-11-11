@@ -1,0 +1,69 @@
+{# Информация о примененных фильтрах #}
+{% if current_filters.category or current_filters.subcategory or current_filters.status or current_filters.type or current_filters.date_from or current_filters.date_to %}
+    <div class="active-filters">
+        <strong>Активные фильтры:</strong>
+        
+        {# Фильтр по дате #}
+        {% if current_filters.date_from or current_filters.date_to %}
+            <span class="filter-tag">
+                📅 
+                {% if current_filters.date_from %}{{ current_filters.date_from }}{% endif %}
+                {% if current_filters.date_from and current_filters.date_to %} - {% endif %}
+                {% if current_filters.date_to %}{{ current_filters.date_to }}{% endif %}
+            </span>
+        {% endif %}
+        
+        {# Фильтр по категории #}
+        {% if current_filters.category %}
+            <span class="filter-tag">
+                🏷️ 
+                {% for category in categories %}
+                    {% if category.id|stringformat:"s" == current_filters.category|stringformat:"s" %}
+                        {{ category.name }}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
+        
+        {# Фильтр по подкатегории #}
+        {% if current_filters.subcategory %}
+            <span class="filter-tag">
+                📂 
+                {% for subcategory in subcategories %}
+                    {% if subcategory.id|stringformat:"s" == current_filters.subcategory|stringformat:"s" %}
+                        {{ subcategory.name }}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
+        
+        {# Фильтр по статусу #}
+        {% if current_filters.status %}
+            <span class="filter-tag">
+                🎯 
+                {% for status in status_choices %}
+                    {% if status.id|stringformat:"s" == current_filters.status|stringformat:"s" %}
+                        {{ status.name }}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
+        
+        {# Фильтр по типу #}
+        {% if current_filters.type %}
+            <span class="filter-tag">
+                🔄 
+                {% for type in type_choices %}
+                    {% if type.id|stringformat:"s" == current_filters.type|stringformat:"s" %}
+                        {{ type.name }}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
+        
+        {# Количество найденных переводов #}
+        <span class="filter-count">
+            Найдено: {{ transfers.paginator.count|default:transfers|length }} переводов
+        </span>
+    </div>
+{% endif %}

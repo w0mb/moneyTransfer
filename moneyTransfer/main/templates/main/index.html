@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    {# Вкладки навигации #}
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link {% if tab == 'transfers' %}active{% endif %}" 
+               href="?tab=transfers">Переводы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if tab == 'reference' %}active{% endif %}" 
+               href="{% url 'reference' %}">Справочник</a>
+        </li>
+    </ul>
+
+    {# Вкладка: Переводы #}
+    {% if tab == 'transfers' %}
+        {# Блок баланса #}
+        <div class="balance-card">
+            <div class="balance-header">
+                <span class="balance-label">Общий баланс:</span>
+                <span class="balance-amount {% if total >= 0 %}positive{% else %}negative{% endif %}">
+                    {{ total|floatformat:0 }} ₽
+                </span>
+            </div>
+        </div>
+        
+        {# Карточка с историей переводов #}
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h4>История переводов</h4>
+                <a href="{% url 'transfer_add' %}" class="btn btn-success btn-sm">+ Добавить</a>
+            </div>
+            <div class="card-body">
+                {% include "main/filters.html" %}
+                {% include "main/active_filters.html" %}
+                {% include "main/transfers_list.html" %}
+                {% include "main/pagination.html" with page_obj=transfers prefix='' %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

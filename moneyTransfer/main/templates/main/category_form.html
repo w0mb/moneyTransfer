@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="form-block">
+        <h2>{{ page_title }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-inner">
+                {# Форма для категории #}
+                {% if edit_object|stringformat:"s"|slice:":8" == "Category" or edit_object.category is None %}
+                    <div class="mb-3">
+                        <label>Название категории</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.name.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {# Форма для подкатегории #}
+                {% else %}
+                    <div class="mb-3">
+                        <label>Категория</label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.category.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label>Название подкатегории</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.name.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {# Отображение общих ошибок формы #}
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <div><strong>{{ field|capfirst }}</strong>: {{ error }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# Кнопки действий #}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <a href="{% url 'reference' %}" class="btn btn-secondary">Отмена</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

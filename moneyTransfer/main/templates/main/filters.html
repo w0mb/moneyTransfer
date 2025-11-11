@@ -1,0 +1,85 @@
+{% load static %}
+
+{# Форма фильтрации #}
+<form method="get" class="filters-form">
+    <div class="filters-grid">
+        {# Фильтр по дате #}
+        <div class="filter-group">
+            <label>Период дат:</label>
+            <div class="date-filters">
+                <input type="date" 
+                       name="date_from" 
+                       value="{{ request.GET.date_from|default:'' }}" 
+                       class="filter-input" 
+                       placeholder="С даты">
+                <input type="date" 
+                       name="date_to" 
+                       value="{{ request.GET.date_to|default:'' }}" 
+                       class="filter-input" 
+                       placeholder="По дату">
+            </div>
+        </div>
+
+        {# Фильтр по категории #}
+        <div class="filter-group">
+            <label>Категория:</label>
+            <select name="category" class="filter-select">
+                <option value="">Все категории</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" 
+                            {% if request.GET.category|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {# Фильтр по подкатегории #}
+        <div class="filter-group">
+            <label>Подкатегория:</label>
+            <select name="subcategory" class="filter-select">
+                <option value="">Все подкатегории</option>
+                {% for subcategory in subcategories %}
+                    <option value="{{ subcategory.id }}"
+                            {% if request.GET.subcategory|stringformat:"s" == subcategory.id|stringformat:"s" %}selected{% endif %}>
+                        {{ subcategory.category.name }} - {{ subcategory.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {# Фильтр по статусу #}
+        <div class="filter-group">
+            <label>Статус:</label>
+            <select name="status" class="filter-select">
+                <option value="">Все статусы</option>
+                {% for status in status_choices %}
+                    <option value="{{ status.id }}" 
+                            {% if request.GET.status|stringformat:"s" == status.id|stringformat:"s" %}selected{% endif %}>
+                        {{ status.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {# Фильтр по типу #}
+        <div class="filter-group">
+            <label>Тип:</label>
+            <select name="type" class="filter-select">
+                <option value="">Все типы</option>
+                {% for type in type_choices %}
+                    <option value="{{ type.id }}" 
+                            {% if request.GET.type|stringformat:"s" == type.id|stringformat:"s" %}selected{% endif %}>
+                        {{ type.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {# Кнопки фильтрации #}
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-filter">🔍 Применить фильтры</button>
+            <a href="?" class="btn btn-clear">🗑️ Сбросить</a>
+        </div>
+    </div>
+</form>

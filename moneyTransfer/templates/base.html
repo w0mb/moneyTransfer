@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% load static %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Денежные переводы{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'main/css/index.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-top">
+                <h1 class="header-title">💰 Система учета переводов</h1>
+                <div class="user-info">
+                    {% if user.is_authenticated %}
+                        <div class="user-controls">
+                            <span class="username">
+                                <i class="fas fa-user"></i> 
+                                {{ user.username }}
+                            </span>
+                            <form action="{% url 'logout' %}" class="logout-form">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-sign-out-alt"></i> Выйти
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Навигация по центру -->
+            <nav class="header-nav">
+                <a href="{% url 'index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                    Главная
+                </a>
+                <a href="{% url 'transfer_add' %}" class="nav-link {% if request.resolver_match.url_name == 'transfer_add' %}active{% endif %}">
+                    ➕ Добавить перевод
+                </a>
+                <a href="{% url 'reference' %}" class="nav-link {% if request.resolver_match.url_name == 'reference' %}active{% endif %}">
+                    📚 Справочник
+                </a>
+                <a href="{% url 'reference_add' %}" class="nav-link {% if request.resolver_match.url_name == 'reference_add' %}active{% endif %}">
+                    ➕ Добавить в справочник
+                </a>
+                <a href="/admin" class="nav-link">⚙️ Админка</a>
+            </nav>
+        </header>
+
+        <main class="main">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</body>
+</html>

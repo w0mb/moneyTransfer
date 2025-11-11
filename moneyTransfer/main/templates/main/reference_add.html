@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">📚 Справочник</h1>
+
+    {# Сообщения #}
+    {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} text-center">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        {# Форма добавления статуса #}
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white text-center d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">📊 Статус</h5>
+                    <span class="badge bg-light text-dark">{{ status_count }}</span>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_status">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Название статуса</label>
+                            {{ status_form.name }}
+                            {% if status_form.name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in status_form.name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            ➕ Добавить статус
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {# Форма добавления типа #}
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-header bg-success text-white text-center d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">🔄 Тип</h5>
+                    <span class="badge bg-light text-dark">{{ type_count }}</span>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_type">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Название типа</label>
+                            {{ type_form.name }}
+                            {% if type_form.name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in type_form.name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            ➕ Добавить тип
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {# Форма добавления категории #}
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-warning">
+                <div class="card-header bg-warning text-dark text-center d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">📁 Категория</h5>
+                    <span class="badge bg-light text-dark">{{ category_count }}</span>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_category">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Название категории</label>
+                            {{ category_form.name }}
+                            {% if category_form.name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in category_form.name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">
+                            ➕ Добавить категорию
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {# Форма добавления подкатегории #}
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-info">
+                <div class="card-header bg-info text-white text-center d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">📂 Подкатегория</h5>
+                    <span class="badge bg-light text-dark">{{ subcategory_count }}</span>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_subcategory">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Категория</label>
+                            {{ subcategory_form.category }}
+                            {% if subcategory_form.category.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in subcategory_form.category.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Название подкатегории</label>
+                            {{ subcategory_form.name }}
+                            {% if subcategory_form.name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in subcategory_form.name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-info w-100">
+                            ➕ Добавить подкатегорию
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Кнопки навигации #}
+    <div class="text-center mt-5">
+        <div class="btn-group" role="group">
+            <a href="{% url 'reference' %}" class="btn btn-outline-primary">
+                📚 Справочник
+            </a>
+            <a href="{% url 'index' %}" class="btn btn-outline-secondary">
+                🏠 На главную
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

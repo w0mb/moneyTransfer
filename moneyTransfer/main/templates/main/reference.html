@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    {# Категории #}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5>📁 Категории</h5>
+                <span class="badge bg-light text-dark">{{ categories.paginator.count }} записей</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Подкат.</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cat in categories %}
+                                <tr>
+                                    <td>{{ cat.id }}</td>
+                                    <td><strong>{{ cat.name }}</strong></td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ cat.subcategories.count }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{# url 'category_edit' cat.id #}" class="btn btn-primary" title="Изменить">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{% url 'category_delete' cat.id %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-outline-danger" title="Удалить"
+                                                        onclick="return confirm('Удалить категорию {{ cat.name }}?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-3">
+                                        <i class="fas fa-folder-open fa-2x mb-2"></i><br>
+                                        Нет категорий
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% include "main/pagination.html" with page_obj=categories prefix='cat_' %}
+            </div>
+        </div>
+    </div>
+
+    {# Подкатегории #}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5>📂 Подкатегории</h5>
+                <span class="badge bg-light text-dark">{{ subcategories.paginator.count }} записей</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Категория</th>
+                                <th>Название</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in subcategories %}
+                                <tr>
+                                    <td>{{ sub.id }}</td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ sub.category.name }}</span>
+                                    </td>
+                                    <td>{{ sub.name }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{# url 'category_edit' sub.id #}" class="btn btn-primary" title="Изменить">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{% url 'category_delete' sub.id %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-outline-danger" title="Удалить"
+                                                        onclick="return confirm('Удалить подкатегорию \"{{ sub.name }}\"?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-3">
+                                        <i class="fas fa-tags fa-2x mb-2"></i><br>
+                                        Нет подкатегорий
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% include "main/pagination.html" with page_obj=subcategories prefix='sub_' %}
+            </div>
+        </div>
+    </div>
+
+    {# Статусы #}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5>📊 Статусы</h5>
+                <span class="badge bg-light text-dark">{{ statuses.paginator.count }} записей</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in statuses %}
+                                <tr>
+                                    <td>{{ s.id }}</td>
+                                    <td>{{ s.name }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{% url 'status_edit' s.id %}" class="btn btn-primary" title="Изменить">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="get" action="{% url 'status_delete' s.id %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-outline-danger" title="Удалить"
+                                                        onclick="return confirm('Удалить статус \"{{ s.name }}\"?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-3">
+                                        <i class="fas fa-flag fa-2x mb-2"></i><br>
+                                        Нет статусов
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% include "main/pagination.html" with page_obj=statuses prefix='stat_' %}
+            </div>
+        </div>
+    </div>
+
+    {# Типы #}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                <h5>🔄 Типы операций</h5>
+                <span class="badge bg-light text-dark">{{ types.paginator.count }} записей</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in types %}
+                                <tr>
+                                    <td>{{ t.id }}</td>
+                                    <td>{{ t.name }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{% url 'type_edit' t.id %}" class="btn btn-primary" title="Изменить">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{% url 'type_delete' t.id %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-outline-danger" title="Удалить"
+                                                        onclick="return confirm('Удалить тип \"{{ t.name }}\"?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-3">
+                                        <i class="fas fa-exchange-alt fa-2x mb-2"></i><br>
+                                        Нет типов
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% include "main/pagination.html" with page_obj=types prefix='type_' %}
+            </div>
+        </div>
+    </div>
+
+    {# Кнопка добавления #}
+    <div class="text-center mt-4">
+        <a href="{% url 'reference_add' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Добавить в справочник
+        </a>
+    </div>
+</div>
+{% endblock %}

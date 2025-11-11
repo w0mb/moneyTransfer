@@ -1,0 +1,80 @@
+{% load static %}
+
+<div class="transfers-list">
+    {% if transfers %}
+        {% for transfer in transfers %}
+            <div class="transfer-card">
+                {# Заголовок карточки перевода #}
+                <div class="transfer-header">
+                    <div class="transfer-meta">
+                        <span class="transfer-date">
+                            <i class="far fa-calendar"></i>
+                            {{ transfer.date_add|date:"d.m.Y H:i" }}
+                        </span>
+                        <span class="transfer-category">
+                            <i class="far fa-folder"></i>
+                            {{ transfer.category.name }}
+                        </span>
+                        {% if transfer.type %}
+                            <span class="transfer-type">
+                                {{ transfer.type.name }}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="transfer-amount">
+                        <span class="transfer-summ {% if transfer.summ >= 0 %}positive{% else %}negative{% endif %}">
+                            {{ transfer.summ }} ₽
+                        </span>
+                    </div>
+                </div>
+
+                {# Детали перевода #}
+                <div class="transfer-details">
+                    <div class="transfer-subcategory">
+                        <i class="far fa-folder-open"></i>
+                        {{ transfer.subcategory.name }}
+                    </div>
+                    
+                    <div class="transfer-status">
+                        <span class="status-badge status-{{ transfer.status.id }}">
+                            {{ transfer.status.name }}
+                        </span>
+                    </div>
+                </div>
+
+                {# Комментарий, если есть #}
+                {% if transfer.comment %}
+                    <div class="transfer-comment">
+                        <i class="far fa-comment"></i>
+                        {{ transfer.comment }}
+                    </div>
+                {% endif %}
+
+                {# Действия с переводом #}
+                <div class="transfer-actions">
+                    <a href="{% url 'transfer_update' transfer.id %}" class="btn btn-sm btn-edit">
+                        <i class="far fa-edit"></i> Изменить
+                    </a>
+                    <form method="post" 
+                          action="{% url 'transfer_delete' transfer.id %}" 
+                          style="display:inline;"
+                          onsubmit="return confirm('Удалить перевод на {{ transfer.summ }} руб.?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-delete">
+                            <i class="far fa-trash-alt"></i> Удалить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-4">
+            <h3>Переводы не найдены</h3>
+            <p class="text-muted">Попробуйте изменить параметры фильтрации</p>
+            <a href="?" class="btn btn-primary">
+                <i class="far fa-refresh"></i> Сбросить фильтры
+            </a>
+        </div>
+    {% endif %}
+</div>

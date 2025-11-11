@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Добавление перевода" }}{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <div class="form-header">
+        <h2>{{ page_title|default:"💰 Добавление нового перевода" }}</h2>
+        <a href="{% url 'index' %}" class="btn btn-back">← Назад к списку</a>
+    </div>
+
+    <div class="form-container">
+        <form method="post" class="transfer-form">
+            {% csrf_token %}
+            
+            {# Отображение ошибок формы #}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Исправьте ошибки:</strong>
+                    <ul>
+                        {% for field in form %}
+                            {% if field.errors %}
+                                <li>
+                                    <strong>{{ field.label }}</strong>: 
+                                    {% for error in field.errors %}
+                                        {{ error }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            {# Поля формы #}
+            <div class="mb-3">
+                <label class="form-label">{{ form.category.label }}</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.category.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.subcategory.label }}</label>
+                {{ form.subcategory }}
+                {% if form.subcategory.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.subcategory.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.type.label }}</label>
+                {{ form.type }}
+                {% if form.type.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.type.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.summ.label }}</label>
+                {{ form.summ }}
+                {% if form.summ.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.summ.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.status.label }}</label>
+                {{ form.status }}
+                {% if form.status.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.status.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.comment.label }}</label>
+                {{ form.comment }}
+                {% if form.comment.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.comment.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Кнопки действий #}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {{ submit_text|default:"✅ Добавить перевод" }}
+                </button>
+                <a href="{% url 'index' %}" class="btn btn-secondary">Отмена</a>
+                
+                {% if form.instance.pk %}
+                    <a href="{% url 'transfer_delete' form.instance.pk %}" class="btn btn-danger">🗑️ Удалить</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
