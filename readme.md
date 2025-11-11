@@ -1,16 +1,18 @@
 # Money Transfer System
 
-Система Движения денежных средств с разделением данных по пользователям.
+## https://bot-develop.ru/
 
-## Установка и запуск
-Python 3.14.0
-postgres 14
+приложение уже развернуто и запущено по этому адресу
+
+## Python 3.14.0
+
+## postgres 14 и выше
+
 ### 1. Клонирование репозитория
-
 
 git clone <https://github.com/w0mb/moneyTransfer.git> .
 
-### Установка необходимого ПО
+### 2. Установка необходимого ПО
 Скачайте Python с официального сайта: https://www.python.org/downloads/
 
 Скачайте PostgreSQL с https://www.postgresql.org/download/
